@@ -4,11 +4,7 @@
 header("Access-Control-Allow-Origin: *");
 
 // Include necessary files
-require_once "./modules/get.php";
-require_once "./modules/post.php";
-require_once "./modules/login.php";
-require_once "./modules/signup.php";
-require_once "./config/database.php";
+require_once("config/initialize.php");
 
 // Initialize database connection
 $con = new Connection();
@@ -44,34 +40,32 @@ switch($_SERVER['REQUEST_METHOD']){
                 }
                 break;
 
-                /*                
-            case 'get_report':
-                if(count($request)>1){
-                    echo json_encode($get->get_report($request[1]));
-                }
-                else{
-                    echo json_encode($get->get_report());
-                }
-                break;
-            
-            case 'get_collage':
-                if(count($request)>1){
-                    echo json_encode($get->get_collage($request[1]));
-                }
-                else{
-                    echo json_encode($get->get_collage());
-                }
-                break;
                 
-            case 'get_flipbook':
+            case 'flipbook':
                 if(count($request)>1){
                     echo json_encode($get->get_flipbook($request[1]));
                 }
                 else{
-                    echo json_encode($get->get_flipbook());
+                    echo json_encode($get->get_flipbook($data));
                 }
                 break;
-                    */
+            
+            case 'collage':
+                if(count($request)>1){
+                    echo json_encode($get->get_collage($request[1]));
+                }
+                else{
+                    echo json_encode($get->get_collage($data));
+                }
+                break;
+                
+            case 'reports':
+                if(count($request)>1){
+                    echo json_encode($get->get_reports($request[1]));
+                }else{
+                    echo json_encode($get->get_reports($data));
+                }
+                    
             default:
                 // Return a 403 response for unsupported requests
                 http_response_code(403);
@@ -92,18 +86,18 @@ switch($_SERVER['REQUEST_METHOD']){
             case 'login':
                 echo json_encode($post->login($data));
                 break;
-           /* 
+           
             case 'reports':
-                echo json_encode($post->reports($data));
+                echo json_encode($post->report($data));
                 break;
 
-            case 'collage':
-                echo json_encode($post->collage($data));
-                break;
+            // case 'collage':
+            //     echo json_encode($post->collage($data));
+            //     break;
 
-            case 'flipbook':
-                echo json_encode($post->flipbook($data));
-                break;*/
+            // case 'flipbook':
+            //     echo json_encode($post->flipbook($data));
+            //     break;
 
             default:
                 http_response_code(403);

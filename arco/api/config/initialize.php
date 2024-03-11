@@ -17,6 +17,9 @@ require_once(CONFIG_PATH.DS.'database.php');
 //load the core classes
 require_once(MODULES_PATH.DS.'get.php');
 require_once(MODULES_PATH.DS.'post.php');
+require_once(MODULES_PATH.DS.'put.php');
+require_once(MODULES_PATH.DS.'delete.php');
+
 
 
 

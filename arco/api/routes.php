@@ -13,6 +13,8 @@ $pdo = $con->connect();
 // Initialize Get and Post objects
 $get = new Get($pdo);
 $post = new Post($pdo);
+$put = new Put($pdo);
+$delete = new Delete($pdo);
 
 // Check if 'request' parameter is set in the request
 if(isset($_REQUEST['request'])){
@@ -65,6 +67,7 @@ switch($_SERVER['REQUEST_METHOD']){
                 }else{
                     echo json_encode($get->get_reports($data));
                 }
+                break;
                     
             default:
                 // Return a 403 response for unsupported requests
@@ -91,13 +94,6 @@ switch($_SERVER['REQUEST_METHOD']){
                 echo json_encode($post->report($data));
                 break;
 
-            // case 'collage':
-            //     echo json_encode($post->collage($data));
-            //     break;
-
-            // case 'flipbook':
-            //     echo json_encode($post->flipbook($data));
-            //     break;
 
             default:
                 http_response_code(403);
@@ -105,11 +101,34 @@ switch($_SERVER['REQUEST_METHOD']){
                 break;
         }
         break;
-    default:
-        // Return a 405 response for unsupported HTTP methods
-        http_response_code(405);
-        echo json_encode(["error" => "Method Not Allowed"]);
+    case 'PUT':
+        $data = json_decode(file_get_contents("php://input"));
+        switch($request[0]){
+            case 'edit_report' :
+                echo json_encode($put->edit_reports($data, $request[1]));
+                break;
+
+                default:
+                http_response_code(403);
+                echo json_encode(["error" => "Forbidden"]);
+                break;
+        } 
         break;
+    case 'DELETE':
+        switch($request[0]){
+            case 'delete_report' :
+                echo json_encode($delete->delete_reports($request[1]));
+                break;
+
+            default:
+            http_response_code(403);
+            echo json_encode(["error" => "Forbidden"]);
+
+        } break;
+            // Return a 405 response for unsupported HTTP methods
+            http_response_code(405);
+            echo json_encode(["error" => "Method Not Allowed"]);
+            break;
 }
 
 ?>

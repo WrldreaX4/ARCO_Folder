@@ -111,33 +111,9 @@
                 return $this->sendResponse("Failed to generate report", $e->getMessage(), 500);
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
-
-
     
-
-
-
-
+    
+    
+    }
 
     ?>

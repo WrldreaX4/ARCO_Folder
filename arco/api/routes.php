@@ -1,21 +1,7 @@
 <?php
 
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, DELETE");
-    header("Access-Control-Max-Age: 3600");
-    header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-    header("Content-Type: application/json; charset=UTF-8");
-    header("HTTP/1.1 200 OK");
-    exit();
-}
-
-// Other headers for actual requests
+// Set CORS headers to allow requests from any origin
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-header("Content-Type: application/json; charset=UTF-8");
-
 
 // Include necessary files
 require_once("config/initialize.php");
@@ -66,6 +52,15 @@ switch($_SERVER['REQUEST_METHOD']){
                 }
                 break;
             
+            case 'flipbook_all':
+                 if(count($request)>1){
+                echo json_encode($get->get_flipbookall($request[1]));
+                    }
+                 else{
+                     echo json_encode($get->get_flipbookall());
+                 }
+                 break;
+            
             case 'collage':
                 if(count($request)>1){
                     echo json_encode($get->get_collage($request[1]));
@@ -82,6 +77,14 @@ switch($_SERVER['REQUEST_METHOD']){
                     echo json_encode($get->get_reports($data));
                 }
                 break;
+
+            case 'reports_all':
+                 if(count($request)>1){
+                    echo json_encode($get->get_reportsall($request[1]));
+                 }else{
+                     echo json_encode($get->get_reportsall());
+                    }
+                    break;
                     
             default:
                 // Return a 403 response for unsupported requests
@@ -103,11 +106,13 @@ switch($_SERVER['REQUEST_METHOD']){
             case 'login':
                 echo json_encode($post->login($data));
                 break;
-           
-            case 'reports':
-                echo json_encode($post->report($data));
-                break;
 
+            case 'report':
+                echo json_encode($post->insertReport($data, $request[1]));
+                break;
+            case 'flipbook':
+                echo json_encode($post->flipbook($data, $request[1]));
+                 break;
 
             default:
                 http_response_code(403);

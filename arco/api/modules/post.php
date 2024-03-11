@@ -86,31 +86,64 @@
             }
         }
 
-        
-        public function report($data) {
 
-            // Check if the necessary data is provided
-            if (!isset($data->report_id) || !isset($data->title) || !isset($data->description) || !isset($data->time_created) || !isset($data->user_id)) {
+
+
+        function insertReport($data, $user_id) {
+            // Check for required fields
+            if (!isset($data->title) || !isset($data->description)) {
                 return $this->sendResponse("Missing fields", null, 400);
             }
         
             try {
-                // Prepare SQL statement to insert the report into the database
-                $stmt = $this->pdo->prepare("INSERT INTO reports (report_id, title, description, time_created, user_id) 
-                                            VALUES (:report_id, :title, :description, :time_created, :user_id)");
+                // Prepare and execute the SQL statement
+                $stmt = $this->pdo->prepare("INSERT INTO reports (title, description, date_created, user_id) 
+                                            VALUES (:title, :description, NOW(), :user_id)");
                 $stmt->execute([
-                    'report_id' => $data->report_id,
                     'title' => $data->title,
                     'description' => $data->description,
-                    'time_created' => $data->time_created,
-                    'user_id' => $data->user_id
+                    'user_id' => $user_id 
                 ]);
+        
+                // Get the ID of the newly inserted report
+                $lastInsertId = $this->pdo->lastInsertId(); 
         
                 return $this->sendResponse("Report generated successfully", null, 200);
             } catch (\PDOException $e) {
-                return $this->sendResponse("Failed to generate report", $e->getMessage(), 500);
+
+                return $this->sendResponse("Failed to generate report. Please try again later.", null, 500);
             }
         }
+
+
+        function flipbook($data, $user_id) {
+            // Check for required fields
+            // if (!isset($data->reportid) || !isset($data->collageid)) {
+            //     return $this->sendResponse("Missing fields", null, 400);
+            // }
+            
+        
+            try {
+                // Prepare and execute the SQL statement
+                $stmt = $this->pdo->prepare("INSERT INTO flipbook (user_id, report_id, collage_id) 
+                                            VALUES (:user_id, :report_id, :collage_id)");
+                $stmt->execute([
+                    'user_id' => $user_id,
+                    'report_id' => $data->report_id,
+                    'collage_id' => $data->collage_id
+                    
+                ]);
+        
+                // Get the ID of the newly inserted report
+                $lastInsertId = $this->pdo->lastInsertId(); 
+        
+                return $this->sendResponse("Report generated successfully", null, 200);
+            } catch (\PDOException $e) {
+
+                return $this->sendResponse("Failed to generate report. Please try again later.", null, 500);
+            }
+        }
+        
     
     
     

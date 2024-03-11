@@ -117,10 +117,6 @@
 
 
         function flipbook($data, $user_id) {
-            // Check for required fields
-            // if (!isset($data->reportid) || !isset($data->collageid)) {
-            //     return $this->sendResponse("Missing fields", null, 400);
-            // }
             
         
             try {
